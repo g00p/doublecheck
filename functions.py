@@ -16,13 +16,13 @@ def split_file_names(directory):
     split .wav file names into lists and add them to a list
     :return list of lists:
     '''
-    file_name_list = []
+    file_name_list_split = []
     for i in os.listdir(directory):
         if not str(i).endswith('.wav'):
             continue
         # Split filename into a list.
-        file_name_list.append(i.split('_'))
-    return file_name_list
+        file_name_list_split.append(i.split('_'))
+    return file_name_list_split
     # filePath = os.path.abspath(i)
     # # Use first 2 indexes in fileNameList to create correct path for file.
     # destPath = ('.\\' + str(masterFolder) + '\\' + str(fileNameList[0]) + '\\' + str(fileNameList[1]))
@@ -31,6 +31,19 @@ def split_file_names(directory):
     #     os.makedirs(destPath)
     # shutil.copy(filePath, destPath)
 
+
+def get_file_names_raw(directory):
+    '''
+    returns a list of .wav filestring names
+    :param directory:
+    :return:
+    '''
+    file_name_list_raw = []
+    for i in os.listdir(directory):
+        if not str(i).endswith('.wav'):
+            continue
+        file_name_list_raw.append(i)
+    return file_name_list_raw
 
 def tally_alts(split_list):
     '''
@@ -57,7 +70,7 @@ def checkMissing(script_file_list, file_names):
     '''
     missing_files = {}
     for i in script_file_list:
-        if i not in file_names:
+        if i + '.wav' not in file_names:
             missing_files[i] = True
     return missing_files
 
@@ -72,7 +85,7 @@ def getWorkbook(directory):
     for i in os.listdir(directory):
         if not str(i).endswith('.xlsx'):
             continue
-        workbook_names.append(str(i))
+        workbook_names.append(i)
     if not len(workbook_names):
         return False
     elif len(workbook_names) == 1:
@@ -90,16 +103,17 @@ def choose_workbook(directory):
     :return: string or exit()
     '''
 
-    workbook_names = getWorkbook(directory)
+    workbook_names = []
+    workbook_names.append(getWorkbook(directory))
     if not workbook_names:
         print('No .xlsx files found. Exiting...')
         exit()
-    elif len(workbook_names) == 1:
+    if len(workbook_names) == 1:
         return str(workbook_names[0])
-    else:
+    if len(workbook_names) > 1:
         # TODO - allow user to choose a file from this list and return it
         print("There are multiple .xlsx files in the directory:")
-        pprint(workbook_names)
+        pprint.pprint(workbook_names)
         exit()
 
 
@@ -170,8 +184,8 @@ def get_script_names(ws, column):
 
 
 def main():
-    dir_to_use = '.'
-    file_name_list = split_file_names(dir_to_use)
+    dir_to_use = 'c://doublechecktest//'
+    file_name_list = get_file_names_raw(dir_to_use)
     print('Got {} files!'.format(len(file_name_list)))
     wb = load_workbook(str(dir_to_use) + "//" +
                        str(choose_workbook(dir_to_use)),
@@ -186,8 +200,8 @@ def main():
 
     missing_files = checkMissing(script_file_list, file_name_list)
     print('The following files are missing:')
-    print(pprint.pprint(missing_files.keys))
-
+    for key in missing_files:
+        print(key)
 
 if __name__ == '__main__':
     main()
