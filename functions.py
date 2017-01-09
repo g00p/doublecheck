@@ -23,13 +23,24 @@ def split_file_names(directory):
         # Split filename into a list.
         file_name_list_split.append(i.split('_'))
     return file_name_list_split
-    # filePath = os.path.abspath(i)
-    # # Use first 2 indexes in fileNameList to create correct path for file.
-    # destPath = ('.\\' + str(masterFolder) + '\\' + str(fileNameList[0]) + '\\' + str(fileNameList[1]))
-    # # Copy file to correct path in file structure.
-    # if not os.path.exists(destPath):
-    #     os.makedirs(destPath)
-    # shutil.copy(filePath, destPath)
+
+
+def make_build(directory):
+    '''
+    searches thru target directory for .wav files and places them into gameloft
+    build structure.
+    :param directory:  directory path to work in
+    '''
+    for i in os.listdir(directory):
+        if not str(i).endswith('.wav'):
+            continue
+        filePath = os.path.abspath(i)
+        # Use first 2 indexes in fileNameList to create correct path for file.
+        destPath = ('.\\' + str(masterFolder) + '\\' + str(fileNameList[0]) + '\\' + str(fileNameList[1]))
+        # Copy file to correct path in file structure.
+        if not os.path.exists(destPath):
+            os.makedirs(destPath)
+        shutil.copy(filePath, destPath)
 
 
 def get_file_names_raw(directory):
@@ -117,16 +128,6 @@ def choose_workbook(directory):
         exit()
 
 
-# def get_workbook(workbook_path):
-#     wb = load_workbook(filename=str(workbook_path))
-#     return wb
-
-def open_workbook(path):
-    '''
-    opens target path as a workbook object
-    :param path:
-    :return: wb object
-    '''
 
 def choose_wb_sheet(wb):
     '''
