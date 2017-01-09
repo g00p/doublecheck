@@ -3,12 +3,6 @@ from openpyxl import load_workbook, worksheet
 from openpyxl.utils import get_column_letter
 
 
-# fileNames = {}
-# alts = {}
-# scriptNames = {}
-# missingFiles = {}
-# lineTotal = 0
-
 # TODO - implement ability to deal with multi-length filenames
 
 def split_file_names(directory):
